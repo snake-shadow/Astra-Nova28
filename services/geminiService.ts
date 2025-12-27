@@ -1,31 +1,26 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ContentMode, ContentResponse } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-const SYSTEM_INSTRUCTION = `You are the Cosmic Lens Tactical Engine.
-Your directive is to provide structured, high-impact data on celestial phenomena.
-VOICE: Direct, scientific, epic.
-
-Return a JSON object with the following structure:
-- hook: A punchy, awe-inspiring headline.
-- sections: An array of 4 objects:
-  1. Telemetry: Technical specs (Mass, Distance, Temp).
-  2. Analysis: Core mind-bending theories or physics facts.
-  3. Visual: CGI/Cinematic visual descriptions.
-  4. Anomaly: Strange mysteries or warnings about the object.
-- sources: An array of objects with 'title' and 'url' to verifiable NASA or educational sites.
-
-Zero small talk. Maximum data density.`;
-
 export async function generateSpaceContent(
   topic: string, 
   mode: ContentMode
 ): Promise<ContentResponse> {
+  // Use a new instance to ensure we pick up any environment changes
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
+  const SYSTEM_INSTRUCTION = `You are the COSMIC CR8T1V3 Deep-Space Tactical Bridge Processor.
+Your mission is to provide structured reconnaissance data on celestial targets.
+TONE: High-fidelity, scientific, epic, precise.
+
+RECONNAISSANCE PROTOCOLS:
+- hook: A CINEMATIC HEADLINE IN ALL CAPS (MAX 6 WORDS)
+- sections: Provide exactly 5 sections: TELEMETRY, ANALYSIS, ANOMALIES, ENVIRONMENTAL DATA, and HUMAN SCALE LORE.
+- HUMAN SCALE LORE: Translate space numbers into things humans understand (size, speed, distance, age comparisons).`;
+
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview", 
-      contents: `Subject: ${topic}. Focus on technical and awe-inspiring data.`,
+      contents: `INITIATE DEEP RECON: ${topic}. Synchronize with stellar databases.`,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         tools: [{googleSearch: {}}],
@@ -33,48 +28,49 @@ export async function generateSpaceContent(
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            hook: { type: Type.STRING },
+            hook: {
+              type: Type.STRING,
+              description: "A cinematic headline in all caps (MAX 6 WORDS)."
+            },
             sections: {
               type: Type.ARRAY,
               items: {
                 type: Type.OBJECT,
                 properties: {
                   title: { type: Type.STRING },
-                  type: { type: Type.STRING, enum: ['telemetry', 'analysis', 'visual', 'anomaly'] },
-                  content: { type: Type.ARRAY, items: { type: Type.STRING } }
+                  type: { 
+                    type: Type.STRING, 
+                    enum: ['telemetry', 'analysis', 'visual', 'anomaly', 'lore'] 
+                  },
+                  content: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING }
+                  }
                 },
-                required: ['title', 'type', 'content']
-              }
-            },
-            sources: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  title: { type: Type.STRING },
-                  url: { type: Type.STRING }
-                },
-                required: ['title', 'url']
+                required: ["title", "type", "content"],
+                propertyOrdering: ["title", "type", "content"]
               }
             }
           },
-          required: ['hook', 'sections', 'sources']
-        },
-        temperature: 1,
+          required: ["hook", "sections"]
+        }
       },
     });
 
-    const text = response.text || "{}";
-    const result = JSON.parse(text);
+    const rawText = response.text || "{}";
+    const parsedData = JSON.parse(rawText);
+    
+    const groundingSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map(chunk => ({
+      title: chunk.web?.title || "Orbital Node",
+      url: chunk.web?.uri || "#"
+    })) || [];
 
     return {
-      hook: result.hook || "Signal Acquired",
-      sections: result.sections || [],
-      sources: result.sources || [],
-      rawText: text
+      hook: parsedData.hook || "SIGNAL_ACQUIRED",
+      sections: parsedData.sections || [],
+      sources: [...(parsedData.sources || []), ...groundingSources].slice(0, 8)
     };
-  } catch (error) {
-    console.error("Transmission Error:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`SIGNAL_LOSS: ${error.message || "RETRY_UPLINK"}`);
   }
 }
