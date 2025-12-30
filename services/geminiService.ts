@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { ContentMode, ContentResponse } from "../types";
 
@@ -6,9 +5,13 @@ export async function generateSpaceContent(
   topic: string, 
   mode: ContentMode
 ): Promise<ContentResponse> {
-  // Use Vite's environment variable convention (VITE_API_KEY) or fallback to process.env
-  const apiKey = (import.meta as any).env?.VITE_API_KEY || process.env.API_KEY;
+  // Vite uses import.meta.env for variables prefixed with VITE_
+  const apiKey = (import.meta as any).env?.VITE_API_KEY || (process.env as any).API_KEY;
   
+  if (!apiKey) {
+    throw new Error("MISSING_UPLINK_KEY: Configure VITE_API_KEY in environment.");
+  }
+
   const ai = new GoogleGenAI({ apiKey });
   
   const SYSTEM_INSTRUCTION = `You are the COSMIC CR8T1V3 Deep-Space Tactical Bridge Processor.

@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# COSMIC CR8T1V3 Deployment Guide
 
-# Run and deploy your AI Studio app
+Follow these steps to get your Tactical Bridge live on Render.
 
-This contains everything you need to run your app locally.
+## 1. Prepare Your Repository
+Push all files in this directory to a new GitHub repository.
 
-View your app in AI Studio: https://ai.studio/apps/drive/11JHU76p6W9SNsVLlzSAEdbYICnZNHQZc
+## 2. Render Dashboard Setup
+1. Log in to [Render.com](https://render.com).
+2. Click **New +** > **Static Site**.
+3. Connect your GitHub repository.
 
-## Run Locally
+## 3. Build Configuration
+*   **Build Command:** `npm install && npm run build`
+*   **Publish Directory:** `dist`
 
-**Prerequisites:**  Node.js
+## 4. Setting the API Key
+1. Go to the **Environment** tab in your Render project.
+2. Click **Add Environment Variable**.
+3. **Key:** `VITE_API_KEY`
+4. **Value:** `[Your Google Gemini API Key]`
+5. Save changes and trigger a new deploy.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 5. Security Note
+Because this is a static site, the API key is bundled in the frontend. 
+**To protect your key:**
+*   Go to [Google Cloud Console Credentials](https://console.cloud.google.com/apis/credentials).
+*   Edit your API Key.
+*   Under **Website restrictions**, add your Render URL: `https://your-site-name.onrender.com/*`.
