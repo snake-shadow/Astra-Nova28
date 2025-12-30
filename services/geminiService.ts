@@ -19,9 +19,10 @@ RECONNAISSANCE PROTOCOLS:
 - HUMAN SCALE LORE: Translate space numbers into things humans understand (size, speed, distance, age comparisons).`;
 
   try {
-    // Upgrading to gemini-3-pro-preview as this is a complex reasoning/STEM task
+    // Using gemini-3-flash-preview to ensure high availability and faster processing
+    // It supports googleSearch grounding which is vital for real-time space news.
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview", 
+      model: "gemini-3-flash-preview", 
       contents: `INITIATE DEEP RECON: ${topic}. Synchronize with stellar databases.`,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -59,11 +60,9 @@ RECONNAISSANCE PROTOCOLS:
       },
     });
 
-    // Access text property directly as per latest SDK guidelines
     const rawText = response.text || "{}";
     const parsedData = JSON.parse(rawText);
     
-    // Extract website URLs from grounding chunks as mandated by Google Search grounding guidelines
     const groundingSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map(chunk => ({
       title: chunk.web?.title || "Orbital Node",
       url: chunk.web?.uri || "#"
@@ -75,6 +74,10 @@ RECONNAISSANCE PROTOCOLS:
       sources: [...(parsedData.sources || []), ...groundingSources].slice(0, 8)
     };
   } catch (error: any) {
+    // Enhanced error messaging for quota issues
+    if (error.message?.includes('429')) {
+      throw new Error("QUOTA_EXHAUSTED: Please wait a moment for the uplink to cool down or check your API billing.");
+    }
     throw new Error(`SIGNAL_LOSS: ${error.message || "RETRY_UPLINK"}`);
   }
 }

@@ -1,4 +1,4 @@
-// COSMIC CR8T1V3 - TACTICAL BRIDGE v4.9.5 - FULL CATALOG RESTORED & VERIFIED
+// COSMIC CR8T1V3 - TACTICAL BRIDGE v4.9.7 - REFINED COSMETICS
 import React, { useState, useEffect, useRef } from 'react';
 import { generateSpaceContent } from './services/geminiService';
 import { ContentMode, HistoryItem, ContentResponse } from './types';
@@ -44,7 +44,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [currentResult, setCurrentResult] = useState<ContentResponse | null>(null);
-  const [systemLogs, setSystemLogs] = useState<string[]>(['SYSTEM_BOOT_COMPLETE', 'UPLINK_READY', 'RECON_CATALOG_LOADED_v4.9.5']);
+  const [systemLogs, setSystemLogs] = useState<string[]>(['SYSTEM_BOOT_COMPLETE', 'UPLINK_READY', 'RECON_CATALOG_LOADED_v4.9.7']);
   
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -209,18 +209,32 @@ const App: React.FC = () => {
       {/* HUD HEADER */}
       <header className="flex justify-between items-center mb-8 z-50 px-6">
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { playSFX('low'); setCurrentResult(null); setTopic(''); }}>
-          <div className="relative w-12 h-12 flex items-center justify-center transition-all group-hover:scale-105">
-            <div className="absolute inset-0 rounded-lg border border-cyan-400/40 bg-cyan-900/10 backdrop-blur-md shadow-[0_0_15px_rgba(34,211,238,0.3)]"></div>
-            <svg className="w-8 h-8 text-cyan-400 relative z-10" viewBox="0 0 100 100" fill="none">
-              <path d="M50 15C35 15 25 25 25 45C25 55 28 65 35 70L30 85L50 80L70 85L65 70C72 65 75 55 75 45C75 25 65 15 50 15Z" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M35 38C35 32 40 28 50 28C60 28 65 32 65 38C65 52 60 58 50 58C40 58 35 52 35 38Z" fill="rgba(34, 211, 238, 0.2)" stroke="currentColor" strokeWidth="2"/>
+          <div className="relative w-14 h-14 flex items-center justify-center transition-all group-hover:scale-110">
+            {/* Branding Container with Glow */}
+            <div className="absolute inset-0 rounded-xl border border-cyan-400/40 bg-cyan-900/10 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.2)] group-hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all"></div>
+            <img 
+                src="/favicon.png" 
+                alt="COSMIC Logo" 
+                className="w-10 h-10 relative z-10 logo-glow" 
+                onError={(e) => {
+                    // Fallback to custom astronaut SVG if png file is missing
+                    (e.target as any).style.display = 'none';
+                    (e.target as any).nextSibling.style.display = 'block';
+                }}
+            />
+            {/* Fallback Astronaut Helmet SVG with Blue Glass effect */}
+            <svg style={{display: 'none'}} className="w-10 h-10 relative z-10 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a10 10 0 0 0-10 10v3a2 2 0 0 0 2 2h1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3h1a2 2 0 0 0 2-2v-3a10 10 0 0 0-10-10z" fill="rgba(34,211,238,0.1)"/>
+              <path d="M7 11h10a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z" fill="rgba(34,211,238,0.3)"/>
+              <circle cx="12" cy="11" r="1" fill="currentColor"/>
+              <path d="M9 17v4m6-4v4"/>
             </svg>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-lg font-black tracking-tight text-cyan-400 michroma uppercase glow-cyan">COSMIC</span>
+              <span className="text-xl font-black tracking-tight text-cyan-400 michroma uppercase glow-cyan">COSMIC</span>
               <div className="px-2 py-0.5 rounded border border-purple-500/50 bg-purple-900/20 backdrop-blur-sm">
-                <span className="text-lg font-black tracking-tight michroma uppercase text-purple-400">CR8T1V3</span>
+                <span className="text-xl font-black tracking-tight michroma uppercase text-purple-400">CR8T1V3</span>
               </div>
             </div>
           </div>
@@ -272,7 +286,8 @@ const App: React.FC = () => {
                       <h3 className="text-xl font-bold text-white michroma uppercase glow-cyan leading-tight">{card.title}</h3>
                       <p className="text-[9px] text-cyan-400/50 uppercase tracking-[0.4em] mono mt-1 font-bold">{card.sub}</p>
                     </div>
-                    <div className="card-action-btn w-10 h-10 group-hover:bg-cyan-400 group-hover:text-black transition-all">
+                    {/* Fixed arrow button to match Search Trigger style */}
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-white bg-white/10 border border-white/5 group-hover:bg-[#22d3ee] group-hover:text-black group-hover:shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
                     </div>
                   </div>
