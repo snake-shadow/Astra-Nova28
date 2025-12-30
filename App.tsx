@@ -33,7 +33,7 @@ const DISCOVERY_CARDS = [
   { id: '21', title: 'PULSAR BEAMS', sub: 'CHANDRA / CRAB NEBULA', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Chandra-crab.jpg/500px-Chandra-crab.jpg' },
   { id: '22', title: 'OORT SHELL', sub: 'OUTER REACHES / ICY CLOUD', img: 'https://images-assets.nasa.gov/image/PIA20118/PIA20118~orig.jpg?w=1015&h=1015&fit=clip&crop=faces%2Cfocalpoint' },
   { id: '23', title: 'MARS EXPLORATION', sub: 'PERSEVERANCE / RED PLANET', img: 'https://images.unsplash.com/photo-1701014159024-f9781490a228?q=80&w=1228&auto=format&fit=crop' },
-  { id: '24', title: 'ARTEMIS II', sub: 'LUNAR RETURN / ORION', img: 'https://cdn.mos.cms.futurecdn.net/L8exumuVUaJatGHCPDRuQm.jpg' },
+  { id: '24', title: 'ARTEMIS II', sub: 'LUNA RETURN / ORION', img: 'https://cdn.mos.cms.futurecdn.net/L8exumuVUaJatGHCPDRuQm.jpg' },
   { id: '25', title: 'DEEP SPACE EYE', sub: 'JWST / INFRARED FRONTIER', img: 'https://cdn.esawebb.org/archives/images/wallpaper5/weic2216b.jpg' },
   { id: '26', title: 'EUROPA CLIPPER', sub: 'OCEAN WORLD / JUPITER', img: 'https://images-assets.nasa.gov/image/PIA24321/PIA24321~medium.jpg' }
 ];
@@ -345,7 +345,7 @@ const App: React.FC = () => {
              <div className="flex-grow overflow-y-auto custom-scroll pr-2 flex flex-col gap-3 mono text-[11px]">
                {systemLogs.map((log, i) => (
                  <div key={i} className={`p-2.5 border-l-2 ${log.includes('ERR') ? 'border-red-500 bg-red-500/10 text-red-500' : 'border-cyan-400/40 text-cyan-400/70'} uppercase tracking-tighter`}>
-                   [{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}] > {log}
+                   [{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}] &gt; {log}
                  </div>
                ))}
              </div>
