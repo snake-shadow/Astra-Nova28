@@ -1,6 +1,6 @@
 // COSMIC CR8T1V3 - TACTICAL BRIDGE v4.9.8 - REFINED COSMETICS
 import React, { useState, useEffect, useRef } from 'react';
-import { generateSpaceContent } from './services/geminiService';
+import { generateSpaceContent } from './services/groqService';
 import { ContentMode, HistoryItem, ContentResponse } from './types';
 
 declare global {

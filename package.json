@@ -1,4 +1,3 @@
-
 {
   "name": "cosmic-cr8t1v3",
   "private": true,
@@ -11,6 +10,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
+    "groq-sdk": "^0.37.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
