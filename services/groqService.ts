@@ -1,13 +1,14 @@
 import Groq from "groq-sdk";
 import { ContentMode, ContentResponse } from "../types";
 
-const groq = new Groq({ 
-  apiKey: (import.meta.env.VITE_GROQ_API_KEY || '') as string
+const groq = new Groq({
+  apiKey: (import.meta.env.VITE_GROQ_API_KEY || '') as string,
+  dangerouslyAllowBrowser: true
 });
 
 export async function generateSpaceContent(
-  topic: string, 
-  mode: ContentMode
+  topic: string,
+  _mode: ContentMode
 ): Promise<ContentResponse> {
   const SYSTEM_INSTRUCTION = `You are the COSMIC CR8T1V3 Deep-Space Tactical Bridge Processor.
 Your mission is to provide structured reconnaissance data on celestial targets.
