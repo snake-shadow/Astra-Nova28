@@ -1,8 +1,10 @@
 import Groq from "groq-sdk";
-import { ContentMode, ContentResponse } from "../types";
+import { ContentMode, ContentResponse } from "./types";
 
 const groq = new Groq({ 
-  apiKey: process.env.API_KEY as string 
+// Right:
+apiKey: import.meta.env.VITE_API_KEY as string
+
 });
 
 export async function generateSpaceContent(
