@@ -342,7 +342,7 @@ const App: React.FC = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {currentResult.sections.map((sec, idx) => (
-                <div key={idx} className={`tactical-card p-8 bg-black/50 ${sec.type === 'lore' ? 'col-span-full min-h-[240px]' : ''}`}>
+                <div key={idx} className={`tactical-card p-8 bg-black/50 ${sec.type === 'lore' ? 'lg:col-span-2' : ''}`}>
                   <h4 className="michroma text-[11px] text-purple-400 mb-6 uppercase tracking-[0.5em] flex items-center justify-between border-b border-purple-400/20 pb-4">
                     <span className="drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">{sec.title}</span>
                   </h4>
