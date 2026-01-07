@@ -10,7 +10,7 @@ interface WikipediaData {
 }
 
 /**
- * Search Wikipedia and return article summary + URL
+ * Search Wikipedia and return FULL article content + URL
  */
 export async function searchWikipedia(query: string): Promise<WikipediaData | null> {
     try {
@@ -30,8 +30,8 @@ export async function searchWikipedia(query: string): Promise<WikipediaData | nu
         const pageTitle = searchData.query.search[0].title;
         console.log('📖 Found Wikipedia article:', pageTitle);
         
-        // Step 2: Get article content
-        const contentUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(pageTitle)}`;
+        // Step 2: Get FULL article content (removed exintro for complete data)
+        const contentUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&explaintext&exsectionformat=plain&titles=${encodeURIComponent(pageTitle)}`;
         
         const contentResponse = await fetch(contentUrl);
         const contentData = await contentResponse.json();
@@ -40,13 +40,16 @@ export async function searchWikipedia(query: string): Promise<WikipediaData | nu
         const pageId = Object.keys(pages)[0];
         const extract = pages[pageId].extract || '';
         
+        // Limit to first 8000 characters to avoid overwhelming Groq
+        const limitedExtract = extract.length > 8000 ? extract.substring(0, 8000) + '...' : extract;
+        
         const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(pageTitle.replace(/ /g, '_'))}`;
         
-        console.log('✅ Wikipedia data retrieved');
+        console.log('✅ Wikipedia data retrieved:', limitedExtract.length, 'characters');
         
         return {
             title: pageTitle,
-            extract: extract,
+            extract: limitedExtract,
             url: wikiUrl
         };
         
